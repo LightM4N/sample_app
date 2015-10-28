@@ -9,6 +9,7 @@ class UsersController < ApplicationController
 
   def show
   	@user = User.find(params[:id])
+    @microposts = @user.microposts.paginate(page: params[:page])
   end
 
   def new
@@ -31,7 +32,7 @@ class UsersController < ApplicationController
 
   def destroy
     User.find(params[:id]).destroy
-    flash[:success] = "Очередной шпрот удален из нашей стаи"
+    flash[:success] = "Очередной шпрот удален из нашего косяка"
     redirect_to users_url
   end
 
@@ -55,12 +56,7 @@ class UsersController < ApplicationController
 
     # Before filters
 
-    def signed_in_user
-      unless signed_in?
-        store_location
-        redirect_to signin_url, notice: "Please sign in."
-      end
-    end
+
 
     def correct_user
       @user = User.find(params[:id])
